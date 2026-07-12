@@ -43,7 +43,7 @@ function ButtonMobile() {
       gsap.set(".menu-items-container", { autoAlpha: 1 });
       gsap.set(".split-word", { yPercent: 120, opacity: 0 });
       gsap.set(".menu-icon", { opacity: 0, scale: 0.8 });
-      gsap.set(".menu-border", { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(".menu-", { scaleX: 0, transformOrigin: "left center" });
       gsap.set(".js-menu-line", { rotate: -75 });
 
       tl = gsap.timeline({
@@ -64,11 +64,11 @@ function ButtonMobile() {
         height: "16.5rem",
         duration: 1.4,
         ease: "expo.inOut",
-        borderRadius: "5%",
+        Radius: "5%",
       })
         .to(".js-menu-backdrop", { opacity: 1, pointerEvents: "auto", duration: 0.8, ease: "power2.out" }, "<")
         .to(".js-menu-line", { rotate: 0, duration: 0.8, ease: "power2.out" }, "<")
-        .to(".menu-border", { scaleX: 1, stagger: 0.08, duration: 0.8, ease: "power2.out" }, "-=0.5")
+        .to(".menu-", { scaleX: 1, stagger: 0.08, duration: 0.8, ease: "power2.out" }, "-=0.5")
         .to(".split-word", { yPercent: 0, opacity: 1, stagger: 0.08, duration: 0.8, ease: "power2.out" }, ">-=0.8")
         .to(".menu-icon", { opacity: 1, scale: 1, stagger: 0.08, duration: 0.8, ease: "power2.out" }, "<")
         .set(".menu-items-container a", { pointerEvents: "auto" });
@@ -145,30 +145,36 @@ function ButtonMobile() {
 
       <div className=" h-19 md:h-20 lg:h-20  w-full fixed top-0 left-0 z-[999]">
         <div className="relative flex justify-between h-full w-full z-10">
-          <TransitionLink to="/" className="flex h-full w-full overflow-hidden p-6">
-            <Logo containerWidth="w-fit" containerHeight="h-full" className="js-global-logo-nav" />
-          </TransitionLink>
-
-          <div className="js-navbar-btn flex items-center justify-end h-full w-full p-6 ">
-            <button className="relative flex items-center justify-center h-full w-[14svw] rounded-sm ">
-              {/* Menu Wrapper */}
-              <div className="js-menu-wrapper bg-warna3 h-full w-full absolute top-0 right-0 z-0 overflow-hidden">
-                <div className="menu-items-container flex gap-3 p-4 flex-col items-start justify-end h-full w-full overflow-hidden opacity-0 invisible">
-                  {MENU_ITEMS.map((item, index) => (
-                    <TransitionLink key={index} to={item.path} onClick={handleClose} className="group relative flex items-center justify-between w-full pb-2">
-                      <h3 className="menu-text font-bold text-md text-warna2 uppercase overflow-hidden block">{item.name}</h3>
-                      <Play className="menu-icon w-2.5 h-2.5 text-warna2 fill-warna2" />
-                      <span className="menu-border absolute bottom-0 left-0 w-full h-px bg-warna2" />
-                    </TransitionLink>
-                  ))}
+          {/* Logo (Jalur Utama ke Home) */}
+          <div className="flex h-full w-full overflow-hidden p-6">
+            <div className="flex h-full w-full overflow-hidden ">
+              <TransitionLink to="/" className="js-global-logo-nav flex h-full w-fit  overflow-hidden ">
+                <Logo containerWidth="w-fit" containerHeight="h-full" className="overflow-hidden" />
+              </TransitionLink>
+            </div>
+          </div>
+          <div className="flex h-full w-full overflow-hidden p-6">
+            <div className="js-navbar-btn flex items-center justify-end h-full w-full ">
+              <button className="relative flex items-center justify-center h-full w-[14svw] rounded-sm ">
+                {/* Menu Wrapper */}
+                <div className="js-menu-wrapper bg-warna3 h-full w-full absolute top-0 right-0 z-0 overflow-hidden">
+                  <div className="menu-items-container flex gap-3 p-4 flex-col items-start justify-end h-full w-full overflow-hidden opacity-0 invisible">
+                    {MENU_ITEMS.map((item, index) => (
+                      <TransitionLink key={index} to={item.path} onClick={handleClose} className="group relative flex items-center justify-between w-full pb-2">
+                        <h3 className="menu-text font-bold text-md text-warna2 uppercase overflow-hidden block">{item.name}</h3>
+                        <Play className="menu-icon w-2.5 h-2.5 text-warna2 fill-warna2" />
+                        <span className="menu- absolute bottom-0 left-0 w-full h-px bg-warna2" />
+                      </TransitionLink>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Hamburger Icon */}
-              <div onClick={handleToggle} className="absolute z-10 cursor-pointer select-none w-5 h-5 flex items-center justify-center">
-                <span className="js-menu-line w-full h-[1.6px] bg-warna2 block origin-center will-change-transform" style={{ transform: "rotate(-75deg)" }} />
-              </div>
-            </button>
+                {/* Hamburger Icon */}
+                <div onClick={handleToggle} className="absolute z-10 cursor-pointer select-none w-5 h-5 flex items-center justify-center">
+                  <span className="js-menu-line w-full h-[1.6px] bg-warna2 block origin-center will-change-transform" style={{ transform: "rotate(-75deg)" }} />
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
