@@ -14,7 +14,7 @@ function LenScrollSmooth({ children }) {
   useEffect(() => {
     // 1. Inisialisasi dasar engine Lenis
     const lenis = new Lenis({
-      duration: 1.6,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Formula akselerasi smooth
       orientation: "vertical",
       gestureOrientation: "vertical",
@@ -22,6 +22,7 @@ function LenScrollSmooth({ children }) {
     });
 
     lenisRef.current = lenis;
+    window.lenis = lenis;
 
     // 2. Ikat event scroll Lenis ke ScrollTrigger agar kalkulasi trigger presisi
     lenis.on("scroll", ScrollTrigger.update);
@@ -36,6 +37,7 @@ function LenScrollSmooth({ children }) {
     // Cleanup saat ganti halaman / unmount komponen
     return () => {
       lenis.destroy();
+      window.lenis = null;
       gsap.ticker.remove(updateRaf);
     };
   }, []);
@@ -44,7 +46,7 @@ function LenScrollSmooth({ children }) {
   useEffect(() => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { immediate: true });
-      ScrollTrigger.refresh(); // Hitung ulang posisi koordinat GSAP di page baru
+      ScrollTrigger.refresh();
     }
   }, [pathname]);
 

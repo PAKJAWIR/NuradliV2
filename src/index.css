@@ -12,15 +12,15 @@
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
 
-  /* Variabel font (Satoshi dihapus, diganti Inter) */
+  /* Variabel font*/
   --font-headline: "InterVariable", system-ui, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   --font-custom: "InterVariable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 
-  /* Kode warna sesuai image_e66204.png */
+  /* Kode warna */
   --warna1: #fffffc;
   --warna2: #0b0b0a;
-  --warna3: #e7ff00;
+  --warna3: #ffff00;
 }
 
 /* Konfigurasi Tema Tailwind v4 */

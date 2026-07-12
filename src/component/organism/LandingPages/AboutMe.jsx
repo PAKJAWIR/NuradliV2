@@ -26,7 +26,7 @@ function AboutMe() {
       <div className="h-full justify-center w-full lg:w-[58%] flex flex-col gap-2 md:gap-12 ">
         {/* TOP ROW*/}
         <div className="flex h-54  lg:h-80 items-center justify-center md:justify-start w-full md:w-[84%] lg:w-full ">
-          <h2 className="text-md md:text-2xl lg:text-3xl font-bold uppercase text-pretty">
+          <h2 className="text-md md:text-2xl lg:text-3xl font-bold uppercase text-pretty ">
             From early exploration to final deployment, every step is approached as a unified process. The aim is not simply to build interfaces, but to shape digital environments that retain their foundational order, even as they grow in
             scale and density.
           </h2>
@@ -46,7 +46,7 @@ function AboutMe() {
               // gap-6 = Jarak internal (Title ke Deskripsi) sebesar 24px
               <div key={index} className="flex flex-col w-[88%] md:w-[60%] gap-4 md:gap-6">
                 <h3 className="text-sm text-warna2 font-bold uppercase">{item.title}</h3>
-                <p className="text-[12px] md:text-xs  text-warna2/80 font-medium text-pretty">{item.desc}</p>
+                <p className="text-[12px] md:text-xs  text-warna2/80 font-medium text-pretty max-w-prose">{item.desc}</p>
               </div>
             ))}
           </div>

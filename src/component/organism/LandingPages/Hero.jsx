@@ -10,7 +10,7 @@ function Hero() {
         </div>
         <div className="flex flex-col justify-end items-end lg:flex-row h-100 w-full ">
           <div className="flex justify-end items-end lg:items-end h-full w-[88%] md:w-[68%] ">
-            <p className="text-xs md:text-sm text-pretty">
+            <p className="text-xs md:text-sm text-pretty max-w-prose">
               I am a developer and designer focusing on the union of visual narratives and functional code. My practice operates in the space between quiet aesthetics and technical execution, where every pixel serves a deliberate purpose
               and every line of code follows a natural rhythm. I strive to create digital environments that are not merely seen, but experienced through a grounded balance of form and minimal resistance.{" "}
             </p>
