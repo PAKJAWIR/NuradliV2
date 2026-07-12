@@ -43,7 +43,7 @@ function ButtonMobile() {
       gsap.set(".menu-items-container", { autoAlpha: 1 });
       gsap.set(".split-word", { yPercent: 120, opacity: 0 });
       gsap.set(".menu-icon", { opacity: 0, scale: 0.8 });
-      gsap.set(".menu-", { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(".menu-border", { scaleX: 0, borderRadius: "0rem", transformOrigin: "left center" });
       gsap.set(".js-menu-line", { rotate: -75 });
 
       tl = gsap.timeline({
@@ -64,11 +64,11 @@ function ButtonMobile() {
         height: "16.5rem",
         duration: 1.4,
         ease: "expo.inOut",
-        Radius: "5%",
+        borderRadius: "0.6rem",
       })
         .to(".js-menu-backdrop", { opacity: 1, pointerEvents: "auto", duration: 0.8, ease: "power2.out" }, "<")
         .to(".js-menu-line", { rotate: 0, duration: 0.8, ease: "power2.out" }, "<")
-        .to(".menu-", { scaleX: 1, stagger: 0.08, duration: 0.8, ease: "power2.out" }, "-=0.5")
+        .to(".menu-border", { scaleX: 1, stagger: 0.08, duration: 0.8, ease: "power2.out", borderRadius: "0.6rem" }, "-=0.5")
         .to(".split-word", { yPercent: 0, opacity: 1, stagger: 0.08, duration: 0.8, ease: "power2.out" }, ">-=0.8")
         .to(".menu-icon", { opacity: 1, scale: 1, stagger: 0.08, duration: 0.8, ease: "power2.out" }, "<")
         .set(".menu-items-container a", { pointerEvents: "auto" });
