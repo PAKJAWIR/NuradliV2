@@ -155,7 +155,7 @@ function SelectedProjects() {
                   </h3>
                 </div>
 
-                <p className="js-project-desc overflow-hidden text-[10px] md:text-xs text-warna2/70 uppercase flex items-center gap-2">
+                <p className="js-project-desc overflow-hidden text-[9px] md:text-xs text-warna2/70 uppercase flex items-center gap-2">
                   <span>{project.category}</span>
                   <span className="text-warna2/40">•</span>
                   <span>{project.type}</span>
