@@ -122,7 +122,7 @@ function ButtonMobile() {
   };
 
   useGSAP(() => {
-    registerTransitionMobile(playHandleLogo);
+    registerTransitionMobile(handleLogo);
   }, []);
 
   // --- 5. KUSTOM ANIMASI TRANSISI SAAT RUTE DIKLIK ---
@@ -169,7 +169,7 @@ function ButtonMobile() {
   });
 
   // --- 6. ANIMASI KHUSUS LOGO ---
-  const playHandleLogo = contextSafe(() => {
+  const handleLogo = contextSafe(() => {
     if (isTransitioningRef.current) return;
     isTransitioningRef.current = true;
 
@@ -185,7 +185,7 @@ function ButtonMobile() {
       .to(".js-menu-wrapper", { width: "100vw", height: "100vh", borderRadius: "0px", duration: 1.4, ease: "expo.inOut" }, "-=0.2")
       .to(".js-wrapper-padding", { padding: "0px", duration: 1.4, ease: "expo.inOut" }, "<")
       .call(completeTransition)
-      .to(".js-menu-wrapper", { width: "100%", height: "100%", borderRadius: "0px", duration: 1.4, ease: "expo.inOut" }, "+=0.2")
+      .to(".js-menu-wrapper", { width: "100%", height: "100%", borderRadius: "0px", duration: 1.4, ease: "expo.inOut" }, "+=0.4")
       .to(".js-wrapper-padding", { padding: "1.5rem", duration: 1.4, ease: "expo.inOut" }, "<")
       .to(".js-menu-line", { scaleX: 1, duration: 0.8, ease: "power2.out" }, "-=0.1")
       .to(".js-menu-line", { rotate: -75, duration: 0.8, ease: "power2.out", transformOrigin: "center center" }, ">-=0.1");

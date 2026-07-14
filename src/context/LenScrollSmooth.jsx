@@ -44,10 +44,18 @@ function LenScrollSmooth({ children }) {
 
   // 4. Interseptor Navigasi: Paksa layar kembali ke atas secara instan saat URL berubah
   useEffect(() => {
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { immediate: true });
-      ScrollTrigger.refresh();
-    }
+    if (!lenisRef.current) return;
+
+    lenisRef.current.scrollTo(0, {
+      immediate: true,
+      force: true,
+    });
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
+    });
   }, [pathname]);
 
   return <>{children}</>;

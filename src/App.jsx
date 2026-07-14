@@ -1,4 +1,4 @@
-import { BrowserRouter } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 
@@ -18,80 +18,82 @@ import TransitionOverlay from "./animations/TransitionOverlay";
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
+  const appRef = useRef(null);
   const footerRef = useRef(null);
+  const location = useLocation();
 
-  useGSAP(() => {
-    const mm = gsap.matchMedia();
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
 
-    // Definisi breakpoint responsive global GSAP
-    mm.add(
-      {
-        isDesktop: "(min-width: 1024px)",
-        isTablet: "(min-width: 768px) and (max-width: 1023px)",
-        isMobile: "(max-width: 767px)",
-      },
-      (context) => {
-        const { isDesktop, isTablet, isMobile } = context.conditions;
+      mm.add(
+        {
+          isDesktop: "(min-width: 1024px)",
+          isTablet: "(min-width: 768px) and (max-width: 1023px)",
+          isMobile: "(max-width: 767px)",
+        },
+        (context) => {
+          const { isTablet, isMobile } = context.conditions;
 
-        // Konfigurasi default start & end
-        let scrollStart = "top bottom";
-        let scrollEnd = "bottom bottom-=16%";
-        let ySet = -124;
+          let scrollStart = "top bottom";
+          let scrollEnd = "bottom bottom-=16%";
+          let ySet = -124;
 
-        // Modifikasi trigger custom berdasarkan ukuran screen
-        if (isTablet) {
-          scrollStart = "center-=20% center+=24%";
-          scrollEnd = "center-=1% center+=5%";
-          ySet = -176;
-        }
+          if (isTablet) {
+            scrollStart = "center-=20% center+=24%";
+            scrollEnd = "center-=1% center+=5%";
+            ySet = -176;
+          }
 
-        if (isMobile) {
-          scrollStart = "top center+=28%";
-          scrollEnd = "center-=1% center";
-          ySet = -168;
-        }
+          if (isMobile) {
+            scrollStart = "top center+=28%";
+            scrollEnd = "center-=1% center";
+            ySet = -168;
+          }
 
-        // Set posisi awal logo footer tersembunyi di atas masking-nya
-        gsap.set(".js-global-logo-footer", { yPercent: ySet });
+          gsap.set(".js-global-logo-footer", {
+            yPercent: ySet,
+          });
 
-        // Timeline tunggal yang reaktif terhadap perubahan screen
-        const logoTimeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: footerRef.current,
-            start: scrollStart,
-            end: scrollEnd,
-            scrub: true,
-          },
-        });
+          gsap
+            .timeline({
+              scrollTrigger: {
+                trigger: footerRef.current,
+                start: scrollStart,
+                end: scrollEnd,
+                scrub: true,
+              },
+            })
+            .to(
+              ".js-global-logo-nav",
+              {
+                yPercent: 124,
+                ease: "none",
+              },
+              0,
+            )
+            .to(
+              ".js-global-logo-footer",
+              {
+                yPercent: 0,
+                ease: "none",
+              },
+              0,
+            );
+        },
+      );
 
-        // Eksekusi animasi paralel logo
-        logoTimeline
-          .to(
-            ".js-global-logo-nav",
-            {
-              yPercent: 124,
-              ease: "none",
-            },
-            0,
-          )
-          .to(
-            ".js-global-logo-footer",
-            {
-              yPercent: 0,
-              ease: "none",
-            },
-            0,
-          );
-      },
-    );
-
-    // Bersihkan seluruh memory trigger dan timeline saat unmount/resize
-    return () => mm.revert();
-  });
+      return () => mm.revert();
+    },
+    {
+      scope: appRef,
+      dependencies: [location.pathname],
+      revertOnUpdate: true,
+    },
+  );
 
   return (
-    <BrowserRouter>
-      {" "}
+    <div ref={appRef}>
       <DeviceProvider>
         <TransitionProvider>
           <LenScrollSmooth>
@@ -101,18 +103,18 @@ function App() {
               </nav>
             </header>
 
-            <main className="relative z-10 h-fit md:border-b md:border-warna2/10">
+            <main className=" md:border-b md:border-warna2/10">
               <AppRoute />
               <BottomBlurOverlay />
             </main>
 
-            <footer ref={footerRef} className="relative">
+            <footer ref={footerRef}>
               <Footer />
             </footer>
           </LenScrollSmooth>
         </TransitionProvider>
       </DeviceProvider>
-    </BrowserRouter>
+    </div>
   );
 }
 

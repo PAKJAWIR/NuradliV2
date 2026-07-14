@@ -38,7 +38,7 @@ export default function TransitionOverlay() {
           duration: 0.6,
           ease: "power3.out",
         },
-        "+=0.1",
+        "+=0.14",
       )
 
       // Reset posisi untuk transisi berikutnya
