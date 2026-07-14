@@ -1,16 +1,19 @@
 import Logo from "../atoms/Logo";
+import TransitionLink from "../atoms/TransitionLink";
 
 function Footer() {
   return (
     <>
-      {/* CONTAINER UTAMA*/}
       <div className="bg-warna1 h-[60svh] md:h-[68svh] w-svw p-6 flex flex-col ">
         <div className="flex flex-col h-full w-full pt-6 justify-between border-t border-warna2/10 md:border-none">
           {/* TOP ROW*/}
           <div className="flex flex-col-reverse lg:flex-row justify-around md:justify-between items-start flex-1 w-full ">
             {/* Logo Area*/}
             <div className="flex items-center w-full md:w-fit h-1/3 md:h-1/2 overflow-hidden">
-              <Logo containerWidth="w-fit" containerHeight="h-12 md:h-22 lg:h-22" className="js-global-logo-footer" />
+      
+              <TransitionLink to="/">
+                <Logo containerWidth="w-fit" containerHeight="h-12 md:h-22 lg:h-22" className="js-global-logo-footer" />
+              </TransitionLink>
             </div>
 
             {/* Navigasi Area*/}
@@ -19,8 +22,12 @@ function Footer() {
               <div className="flex flex-col gap-6 w-fit items-start">
                 <h3 className="text-warna2/45 uppercase text-md font-bold">Links</h3>
                 <div className="flex flex-col gap-4 items-start">
-                  <p className="text-warna2/66 text-sm">about</p>
-                  <p className="text-warna2/66 text-sm">works</p>
+                  <TransitionLink to="/about" className="text-warna2/66 text-sm hover:text-warna2 transition-colors">
+                    about
+                  </TransitionLink>
+                  <TransitionLink to="/works" className="text-warna2/66 text-sm hover:text-warna2 transition-colors">
+                    works
+                  </TransitionLink>
                 </div>
               </div>
               {/* Connect */}

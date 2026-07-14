@@ -4,8 +4,9 @@ import gsap from "gsap";
 import { Play } from "lucide-react";
 import SplitType from "split-type";
 import Logo from "../../atoms/Logo";
-import TransitionLink from "../../atoms/TransitionLink";
 import { useNavigate } from "react-router-dom";
+import { useTransition } from "../../../context/TransitionContext";
+import TransitionLink from "../../atoms/TransitionLink";
 
 const MENU_ITEMS = [
   { name: "Home", path: "/" },
@@ -17,6 +18,7 @@ const MENU_ITEMS = [
 function ButtonMobile() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { registerTransitionMobile, completeTransition } = useTransition();
 
   const containerRef = useRef(null);
   const activeTlRef = useRef(null);
@@ -24,7 +26,9 @@ function ButtonMobile() {
   const isClosingRef = useRef(false);
   const splitRef = useRef(null);
   const isTransitioningRef = useRef(false);
+  const pendingLogoPathRef = useRef("/");
 
+  // Mengambil scope container aman untuk animasi GSAP
   const { contextSafe } = useGSAP({ scope: containerRef });
 
   // --- 1. HELPER: TOTAL RESET KE DEFAULT ---
@@ -39,14 +43,12 @@ function ButtonMobile() {
       activeTlRef.current = null;
     }
 
-    // PENTING: Menambahkan ".menu-icon svg" agar inline style dari GSAP bersih total
     gsap.set([".js-menu-wrapper", ".menu-items-container", ".menu-text", ".menu-icon", ".menu-icon svg", ".menu-border", ".js-menu-backdrop", ".js-wrapper-padding"], { clearProps: "all" });
-
     gsap.set(".menu-items-container", { autoAlpha: 0 });
     gsap.set(".menu-items-container a", { pointerEvents: "auto" });
   };
 
-  // --- 2. HELPER: KENDALI INTERUPSI ANIMASI DI TENGAH JALAN ---
+  // --- 2. HANDLER INTERUPSI AKTIF ---
   const handleActiveInterruption = () => {
     const tl = activeTlRef.current;
     if (tl && tl.isActive()) {
@@ -61,11 +63,10 @@ function ButtonMobile() {
     return false;
   };
 
-  // --- ANIMASI BUKA MENU ---
-  const playOpen = contextSafe(() => {
+  // --- 3. ANIMASI BUKA MENU ---
+  const playOpen = () => {
     isOpeningRef.current = true;
     isClosingRef.current = false;
-
     let tl = activeTlRef.current;
 
     if (!tl) {
@@ -96,42 +97,35 @@ function ButtonMobile() {
 
       activeTlRef.current = tl;
     }
-
     gsap.set(".menu-items-container a", { pointerEvents: "none" });
     tl.timeScale(1).play();
-  });
+  };
 
-  // --- ANIMASI TUTUP MENU ---
-  const playClose = contextSafe(() => {
+  // --- 4. ANIMASI TUTUP MENU ---
+  const playClose = () => {
     const tl = activeTlRef.current;
     if (!tl) return;
-
     isOpeningRef.current = false;
     isClosingRef.current = true;
-
     gsap.set(".menu-items-container a", { pointerEvents: "none" });
     tl.timeScale(0.88).reverse();
-  });
+  };
 
   const handleToggle = () => {
-    if (isTransitioningRef.current) return;
-    if (handleActiveInterruption()) return;
-
-    if (!isOpen) {
-      setIsOpen(true);
-      playOpen();
-    } else {
-      playClose();
-    }
+    if (isTransitioningRef.current || handleActiveInterruption()) return;
+    !isOpen ? (setIsOpen(true), playOpen()) : playClose();
   };
 
   const handleClose = () => {
-    if (isTransitioningRef.current) return;
-    if (handleActiveInterruption()) return;
+    if (isTransitioningRef.current || handleActiveInterruption()) return;
     if (isOpen) playClose();
   };
 
-  // --- KUSTOM ANIMASI TRANSISI SAAT RUTE DIKLIK ---
+  useGSAP(() => {
+    registerTransitionMobile(playHandleLogo);
+  }, []);
+
+  // --- 5. KUSTOM ANIMASI TRANSISI SAAT RUTE DIKLIK ---
   const handleUrl = contextSafe((e, path) => {
     if (e) {
       e.preventDefault();
@@ -143,7 +137,6 @@ function ButtonMobile() {
 
     isTransitioningRef.current = true;
 
-    // Ambil semua svg ikon untuk di-reset, dan ambil svg spesifik yang diklik
     const allIcons = containerRef.current.querySelectorAll(".menu-icon svg");
     const clickedIcon = e.currentTarget.querySelector(".menu-icon svg");
 
@@ -157,13 +150,8 @@ function ButtonMobile() {
     });
 
     tlTransition
-      // 1. Kembalikan semua ikon rute lain yang ditinggalkan ke 0deg secara smooth
       .to(allIcons, { rotate: 0, duration: 0.6, ease: "power3.out" })
-
-      // 2. Di saat bersamaan (<), putar ikon yang aktif diklik ke 90deg dengan hentakan back.out
-      .to(clickedIcon, { rotate: 90, duration: 0.6, ease: "power3.out)" }, "<")
-
-      // Jeda mikro, lalu jalankan rentetan animasi outro panel menu
+      .to(clickedIcon, { rotate: 90, duration: 0.6, ease: "power3.out" }, "<") // Memperbaiki typo kurung tutup pada string ease
       .to(".split-word", { yPercent: 120, opacity: 0, stagger: -0.08, duration: 0.8, ease: "power2.in" }, "+=0.02")
       .to(".menu-icon", { opacity: 0, scale: 0, stagger: -0.08, duration: 0.8, ease: "power2.in" }, "<")
       .to(".menu-border", { scaleX: 0, stagger: -0.08, duration: 0.8, ease: "power2.in" }, "<")
@@ -180,77 +168,69 @@ function ButtonMobile() {
       .to(".js-menu-line", { rotate: -75, duration: 0.8, ease: "power2.out", transformOrigin: "center center" }, ">-=0.1");
   });
 
-  // --- ANIMASI KHUSUS LOGO ---
-  const handleLogoClick = contextSafe((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  // --- 6. ANIMASI KHUSUS LOGO ---
+  const playHandleLogo = contextSafe(() => {
     if (isTransitioningRef.current) return;
-    if (window.location.pathname === "/") return;
-
     isTransitioningRef.current = true;
 
-    if (isOpen) {
-      playClose();
-    }
-
-    const tlLogo = gsap.timeline({
+    const tl = gsap.timeline({
       onComplete: () => {
         isTransitioningRef.current = false;
         resetToDefault();
       },
     });
 
-    tlLogo
-      .to(".js-menu-line", { rotate: 0, duration: 0.8, ease: "power2.out" })
+    tl.to(".js-menu-line", { rotate: 0, duration: 0.8, ease: "power2.out" })
       .to(".js-menu-line", { scaleX: 0, transformOrigin: "left center", duration: 0.8, ease: "power2.inOut" }, ">-=0.2")
       .to(".js-menu-wrapper", { width: "100vw", height: "100vh", borderRadius: "0px", duration: 1.4, ease: "expo.inOut" }, "-=0.2")
       .to(".js-wrapper-padding", { padding: "0px", duration: 1.4, ease: "expo.inOut" }, "<")
-      .call(() => {
-        navigate("/");
-      })
+      .call(completeTransition)
       .to(".js-menu-wrapper", { width: "100%", height: "100%", borderRadius: "0px", duration: 1.4, ease: "expo.inOut" }, "+=0.2")
       .to(".js-wrapper-padding", { padding: "1.5rem", duration: 1.4, ease: "expo.inOut" }, "<")
       .to(".js-menu-line", { scaleX: 1, duration: 0.8, ease: "power2.out" }, "-=0.1")
       .to(".js-menu-line", { rotate: -75, duration: 0.8, ease: "power2.out", transformOrigin: "center center" }, ">-=0.1");
-  });
+  }, []);
 
   return (
     <div ref={containerRef}>
+      {/* Backdrop */}
       <div onClick={handleClose} className="js-menu-backdrop fixed inset-0 bg-warna2/40 backdrop-blur-xs gpu-fix smooth-item opacity-0 pointer-events-none z-[998]" />
 
+      {/* Navigation Top Bar */}
       <div className="h-19 md:h-20 lg:h-20 w-full fixed top-0 left-0 z-[999]">
         <div className="relative flex justify-between h-full w-full z-10">
+          {/* Bagian Kiri: Logo */}
           <div className="flex h-full w-full p-6">
-            <div className="flex h-full w-full overflow-hidden ">
-              <TransitionLink to="/" onClick={handleLogoClick} className="js-global-logo-nav flex h-full w-fit overflow-hidden">
+            <div className="flex h-full w-full overflow-hidden">
+              <TransitionLink to="/" className={`js-global-logo-nav flex h-full w-fit overflow-hidden ${isOpen ? "pointer-events-none" : "pointer-events-auto"}`}>
                 <Logo containerWidth="w-fit" containerHeight="h-full" className="overflow-hidden" />
               </TransitionLink>
             </div>
           </div>
+
+          {/* Bagian Kanan: Menu Trigger & Panel Container */}
           <div className="js-wrapper-padding flex h-full w-full p-6">
             <div className="flex items-center justify-end h-full w-full">
               <button className="relative flex items-center justify-center h-full w-[14svw] rounded-sm">
+                {/* Panel Menu (Akan membesar menjadi overlay transisi) */}
                 <div className="js-menu-wrapper bg-warna3 h-full w-full absolute top-0 right-0 z-0 overflow-hidden">
                   <div className="menu-items-container flex gap-3 p-4 flex-col items-start justify-end h-full w-full overflow-hidden opacity-0 invisible">
                     {MENU_ITEMS.map((item, index) => {
                       const isActive = window.location.pathname === item.path;
-
                       return (
-                        <TransitionLink key={index} to={item.path} onClick={(e) => handleUrl(e, item.path)} className="group relative flex items-center justify-between w-full pb-2">
+                        <a key={index} href={item.path} onClick={(e) => handleUrl(e, item.path)} className="group relative flex items-center justify-between w-full pb-2">
                           <h3 className="menu-text font-bold text-md text-warna2 uppercase overflow-hidden block">{item.name}</h3>
-
                           <div className="menu-icon flex items-center justify-center">
                             <Play className={`w-2.5 h-2.5 text-warna2 fill-warna2 ${isActive ? "rotate-90" : ""}`} />
                           </div>
-
                           <span className="menu-border absolute bottom-0 left-0 w-full h-px bg-warna2" />
-                        </TransitionLink>
+                        </a>
                       );
                     })}
                   </div>
                 </div>
 
+                {/* Hamburger Line Trigger */}
                 <div onClick={handleToggle} className="absolute z-10 cursor-pointer select-none w-5 h-5 flex items-center justify-center">
                   <span className="js-menu-line w-full h-[1.6px] bg-warna2 block origin-center will-change-transform" style={{ transform: "rotate(-75deg)" }} />
                 </div>

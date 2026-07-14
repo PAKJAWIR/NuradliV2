@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { useTransition } from "../context/TransitionContext";
 
 export default function TransitionOverlay() {
-  const { registerTransition, completeTransition } = useTransition();
+  const { registerTransitionDekstop, completeTransition } = useTransition();
 
   const tl = useRef(null);
 
@@ -46,7 +46,7 @@ export default function TransitionOverlay() {
         yPercent: 100,
       });
 
-    registerTransition(() => {
+    registerTransitionDekstop(() => {
       tl.current.restart();
     });
   }, []);

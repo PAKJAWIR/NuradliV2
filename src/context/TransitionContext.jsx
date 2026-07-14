@@ -1,50 +1,65 @@
 import { createContext, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
 import TransitionOverlay from "../animations/TransitionOverlay";
-
+import { useDevice } from "./DeviceProvider";
 const TransitionContext = createContext(null);
 
 export function TransitionProvider({ children }) {
   const navigate = useNavigate();
-
-  // URL tujuan (ditahan sementara)
   const pendingPath = useRef(null);
+  const { isMobile } = useDevice();
 
-  // Function play() milik Overlay
-  const playTransition = useRef(null);
+  // Dipisah agar transisi desktop dan mobile tidak saling menimpa
+  const playDesktopTransition = useRef(null);
+  const playMobileTransition = useRef(null);
 
-  // Dipanggil Overlay saat mount
-  const registerTransition = (playFn) => {
-    playTransition.current = playFn;
+  const registerTransitionDekstop = (playFn) => {
+    playDesktopTransition.current = playFn;
+  };
+  const registerTransitionMobile = (playFn) => {
+    playMobileTransition.current = playFn;
   };
 
-  // Dipanggil TransitionLink
-  const transitionTo = (path) => {
+
+  const transitionToDekstop = (path) => {
     pendingPath.current = path;
 
-    playTransition.current?.();
+    // Eksekusi animasi sesuai ukuran layar (Breakpoint 768px atau sesuaikan)
+    if (playDesktopTransition.current) {
+      playDesktopTransition.current();
+    } else {
+      completeTransition();
+    }
   };
 
-  // Dipanggil Overlay ketika animasi masuk selesai
+  const transitionToMobile = (path) => {
+    pendingPath.current = path;
+
+    // Eksekusi animasi sesuai ukuran layar (Breakpoint 768px atau sesuaikan)
+    if (isMobile && playMobileTransition.current) {
+      playMobileTransition.current();
+    } else {
+      completeTransition();
+    }
+  };
+
   const completeTransition = () => {
     if (!pendingPath.current) return;
-
     navigate(pendingPath.current);
-
     pendingPath.current = null;
   };
 
   return (
     <TransitionContext.Provider
       value={{
-        registerTransition,
-        transitionTo,
+        registerTransitionDekstop,
+        registerTransitionMobile,
+        transitionToDekstop,
+        transitionToMobile,
         completeTransition,
       }}
     >
       {children}
-
       <TransitionOverlay />
     </TransitionContext.Provider>
   );

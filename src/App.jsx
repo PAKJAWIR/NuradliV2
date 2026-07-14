@@ -91,8 +91,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      <TransitionProvider>
-        <DeviceProvider>
+      {" "}
+      <DeviceProvider>
+        <TransitionProvider>
           <LenScrollSmooth>
             <header>
               <nav>
@@ -109,8 +110,8 @@ function App() {
               <Footer />
             </footer>
           </LenScrollSmooth>
-        </DeviceProvider>
-      </TransitionProvider>
+        </TransitionProvider>
+      </DeviceProvider>
     </BrowserRouter>
   );
 }
