@@ -4,54 +4,57 @@ import TransitionLink from "../atoms/TransitionLink";
 function Footer() {
   return (
     <>
-      <div className="bg-warna1 h-[60svh] md:h-[68svh] w-svw p-6 flex flex-col ">
-        <div className="flex flex-col h-full w-full pt-6 justify-between border-t border-warna2/10 md:border-none">
-          {/* TOP ROW*/}
-          <div className="flex flex-col-reverse lg:flex-row justify-around md:justify-between items-start flex-1 w-full ">
-            {/* Logo Area*/}
-            <div className="flex items-center w-full md:w-fit h-1/3 md:h-1/2 overflow-hidden">
-      
-              <TransitionLink to="/">
-                <Logo containerWidth="w-fit" containerHeight="h-12 md:h-22 lg:h-22" className="js-global-logo-footer" />
-              </TransitionLink>
-            </div>
-
-            {/* Navigasi Area*/}
-            <div className="flex justify-start md:justify-end gap-12 flex-row h-full w-full md:w-auto items-start ">
-              {/* Links */}
-              <div className="flex flex-col gap-6 w-fit items-start">
-                <h3 className="text-warna2/45 uppercase text-md font-bold">Links</h3>
-                <div className="flex flex-col gap-4 items-start">
-                  <TransitionLink to="/about" className="text-warna2/66 text-sm hover:text-warna2 transition-colors">
-                    about
-                  </TransitionLink>
-                  <TransitionLink to="/works" className="text-warna2/66 text-sm hover:text-warna2 transition-colors">
-                    works
-                  </TransitionLink>
+      <div className="bg-warna2 h-svh w-screen p-4 py-6 md:p-6 overflow-hidden">
+        <div className="flex flex-col h-full w-full">
+          {/* CTA */}
+          <div className="flex flex-col md:flex-row h-full w-full">
+            {/* Left / Top */}
+            <div className="flex flex-col h-full w-full ">
+              {/* Explanation */}
+              <div className="flex h-full w-full lg:w-full ">
+                <h2 className="text-warna1 text-2xl lg:text-4xl capitalize text-pretty w-full md:w-64 lg:w-xl">simple doesn't mean effortless. it just means someone cared enough to remove what wasn't needed. </h2>
+              </div>
+              {/* Email */}
+              <div className="flex flex-col items-start justify-end h-full w-full ">
+                <p className="text-warna1 text-sm md:text-lg">contact me</p>
+                <div className="flex flex-col h-fit w-fit">
+                  <h1 className="text-warna1 text-xl md:text-2xl">nuradli@gmail.com</h1>
+                  <span className="h-0.5 w-full bg-warna1"></span>
                 </div>
               </div>
-              {/* Connect */}
-              <div className="flex flex-col gap-6 w-fit items-start">
-                <h3 className="text-warna2/45 uppercase text-md font-bold">Connect</h3>
-                <div className="flex flex-col gap-4 items-start">
-                  <p className="text-warna2/66 text-sm">instagram</p>
-                  <p className="text-warna2/66 text-sm">linkedin</p>
-                  <p className="text-warna2/66 text-sm">github</p>
+            </div>
+            {/* Right / Bottom */}
+            <div className="flex flex-row h-full w-full">
+              {/* Links */}
+              <div className="flex flex-row justify-start md:justify-end items-center  md:items-start h-full w-full ">
+                <div className="flex gap-2 flex-col h-fit w-fit">
+                  <p className="text-warna1 text-sm md:text-lg lowercase">links</p>
+                  <div className="flex flex-col gap-2 h-fit w-fit">
+                    <h3 className="text-warna1 text-xl md:text-2xl">about</h3>
+                    <h3 className="text-warna1 text-xl md:text-2xl">works</h3>
+                    <h3 className="text-warna1 text-xl md:text-2xl">services</h3>
+                  </div>
+                </div>
+              </div>
+              {/* Socials */}
+              <div className="flex justify-start md:justify-end items-center md:items-start flex-row h-full w-full lg:w-1/3">
+                <div className="flex gap-2 flex-col h-fit w-fit">
+                  <p className="text-warna1 text-sm md:text-lg lowercase">socials</p>
+                  <div className="flex flex-col gap-2 h-fit w-fit">
+                    <h3 className="text-warna1 text-xl md:text-2xl">instagram</h3>
+                    <h3 className="text-warna1 text-xl md:text-2xl">linkedin</h3>
+                    <h3 className="text-warna1 text-xl md:text-2xl">github</h3>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* BOTTOM ROW*/}
-          <div className="flex items-end h-fit w-full pt-2 ">
-            <h1 className="text-warna2 font-bold text-6xl md:text-9xl lg:text-[158px] leading-none lg:leading-30 uppercase">Nuradli</h1>
+          {/* Footer */}
+          <div className="flex flex-row justify-start items-end h-fit md:h-full w-full gap-2 md:gap-6 leading-none">
+            <h1 className="text-warna1 text-[6rem] md:text-[12rem] lg:text-[18rem] ">nuradli</h1>
+            <h1 className="text-warna1 text-xs md:text-xl leading-6 md:leading-14 lg:leading-18">© 2026</h1>
           </div>
         </div>
-      </div>
-
-      {/* COPYRIGHT ROW*/}
-      <div className="flex items-center h-14 md:h-[6svh] w-full px-6 border-t border-warna2/10 bg-warna1">
-        <p className="text-warna2 text-sm">nuradli © 2026</p>
       </div>
     </>
   );

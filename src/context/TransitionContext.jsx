@@ -20,9 +20,10 @@ export function TransitionProvider({ children }) {
     playMobileTransition.current = playFn;
   };
 
-
   const transitionToDekstop = (path) => {
     pendingPath.current = path;
+
+    window.history.pushState({}, "", path);
 
     // Eksekusi animasi sesuai ukuran layar (Breakpoint 768px atau sesuaikan)
     if (playDesktopTransition.current) {
@@ -45,8 +46,16 @@ export function TransitionProvider({ children }) {
 
   const completeTransition = () => {
     if (!pendingPath.current) return;
-    navigate(pendingPath.current);
+
+    const targetPath = pendingPath.current;
     pendingPath.current = null;
+
+    // Beri jeda 2 frame (sekitar 30ms) agar animasi overlay tuntas dipaint browser
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        navigate(targetPath, { replace: true });
+      });
+    });
   };
 
   return (

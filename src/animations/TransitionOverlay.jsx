@@ -53,7 +53,7 @@ export default function TransitionOverlay() {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden">
-      <div className="js-transition-overlay absolute inset-0 bg-warna3" />
+      <div className="js-transition-overlay absolute inset-0 bg-warna2" />
     </div>
   );
 }
