@@ -6,9 +6,9 @@ function PreContact() {
           <div className="flex items-center justify-start h-full w-full md:w-3xl lg:w-full ">
             <h2 className="text-warna2 text-4xl md:text-4xl lg:text-7xl w-full md:w-full text-pretty capitalize">So... what’s on your mind?</h2>
           </div>
-          <div className="flex flex-col md:flex-row md:items-end  h-full w-full gap-4">
+          <div className="flex flex-col md:flex-row md:items-end  h-full w-full gap-6">
             <div className="flex items-end h-full w-full justify-start md:justify-end ">
-              <p className="text-warna2 text-xs md:text-sm text-pretty w-50 lg:w-58 lowercase ">You don't need to have it all figured out. Honestly, neither do I.</p>
+              <p className="text-warna2 text-xs md:text-sm text-pretty w-50 md:w-58 lg:w-58 lowercase ">You don't need to have it all figured out. Honestly, neither do I.</p>
             </div>
             <div className="flex items-end justify-start md:justify-end h-full w-1/2 ">
               <div className="flex flex-col h-fit w-fit">

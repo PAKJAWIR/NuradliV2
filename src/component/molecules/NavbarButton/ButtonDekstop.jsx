@@ -30,9 +30,9 @@ function ButtonDekstop() {
         {/* CTA Button */}
         <div className="flex h-full md:w-1/3 lg:w-1/6 items-center justify-end">
           <TransitionLink to="/contact">
-            <div className="flex flex-col items-center justify-center h-full w-fit cursor-pointer group">
+            <div className="flex flex-col items-center justify-center h-full w-fit cursor-pointer">
               <h3 className="text-warna1 text-xl lowercase font-semibold">Let's Talk</h3>
-              <span className="h-[2px] bg-warna1 w-full transition-all duration-300 group-hover:w-0"></span>
+              <span className="h-[2px] bg-warna1 w-full"></span>
             </div>
           </TransitionLink>
         </div>

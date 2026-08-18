@@ -4,7 +4,7 @@ import TransitionLink from "../atoms/TransitionLink";
 function Footer() {
   return (
     <>
-      <div className="bg-warna2 h-svh w-screen p-4 py-6 md:p-6 overflow-hidden">
+      <div className="bg-warna2 h-200 md:h-svh w-screen p-4 py-6 md:p-6 overflow-hidden">
         <div className="flex flex-col h-full w-full">
           {/* CTA */}
           <div className="flex flex-col md:flex-row h-full w-full">

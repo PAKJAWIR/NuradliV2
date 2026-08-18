@@ -2,6 +2,7 @@ import { createContext, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import TransitionOverlay from "../animations/TransitionOverlay";
 import { useDevice } from "./DeviceProvider";
+
 const TransitionContext = createContext(null);
 
 export function TransitionProvider({ children }) {
@@ -9,23 +10,27 @@ export function TransitionProvider({ children }) {
   const pendingPath = useRef(null);
   const { isMobile } = useDevice();
 
-  // Dipisah agar transisi desktop dan mobile tidak saling menimpa
   const playDesktopTransition = useRef(null);
   const playMobileTransition = useRef(null);
+  const playMobileMenuClose = useRef(null);
 
-  const registerTransitionDekstop = (playFn) => {
+  const registerTransitionDesktop = (playFn) => {
     playDesktopTransition.current = playFn;
   };
+
   const registerTransitionMobile = (playFn) => {
     playMobileTransition.current = playFn;
   };
 
-  const transitionToDekstop = (path) => {
-    pendingPath.current = path;
+  // Mendaftarkan animasi penutupan menu mobile
+  const registerMobileMenuClose = (playFn) => {
+    playMobileMenuClose.current = playFn;
+  };
 
+  const transitionToDesktop = (path) => {
+    pendingPath.current = path;
     window.history.pushState({}, "", path);
 
-    // Eksekusi animasi sesuai ukuran layar (Breakpoint 768px atau sesuaikan)
     if (playDesktopTransition.current) {
       playDesktopTransition.current();
     } else {
@@ -36,9 +41,14 @@ export function TransitionProvider({ children }) {
   const transitionToMobile = (path) => {
     pendingPath.current = path;
 
-    // Eksekusi animasi sesuai ukuran layar (Breakpoint 768px atau sesuaikan)
-    if (isMobile && playMobileTransition.current) {
-      playMobileTransition.current();
+    // URL langsung berubah
+    window.history.pushState({}, "", path);
+
+    // Jalankan close animation kalau menu sedang aktif
+    if (isMobile && playMobileMenuClose.current) {
+      playMobileMenuClose.current(() => {
+        completeTransition();
+      });
     } else {
       completeTransition();
     }
@@ -50,7 +60,6 @@ export function TransitionProvider({ children }) {
     const targetPath = pendingPath.current;
     pendingPath.current = null;
 
-    // Beri jeda 2 frame (sekitar 30ms) agar animasi overlay tuntas dipaint browser
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         navigate(targetPath, { replace: true });
@@ -61,9 +70,10 @@ export function TransitionProvider({ children }) {
   return (
     <TransitionContext.Provider
       value={{
-        registerTransitionDekstop,
+        registerTransitionDesktop,
         registerTransitionMobile,
-        transitionToDekstop,
+        registerMobileMenuClose,
+        transitionToDesktop,
         transitionToMobile,
         completeTransition,
       }}

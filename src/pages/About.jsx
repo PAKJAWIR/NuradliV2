@@ -1,7 +1,11 @@
-import HeroAbout from "../component/organism/About/HeroAbout";
+import AboutLayout from "../component/template/AboutLayout";
 
 function About() {
-  return <HeroAbout />;
+  return (
+    <>
+      <AboutLayout />
+    </>
+  );
 }
 
 export default About;
